@@ -1,0 +1,230 @@
+<!DOCTYPE HTML>
+<!-- Brandon Leitch -->
+<html>
+	<head>
+		<title></title>
+		<link href='https://fonts.googleapis.com/css?family=Product+Sans' rel='stylesheet' type='text/css'>
+		<link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
+		<style>
+			html{
+				height: 100%;
+				position: relative;
+			}
+
+			body{
+				margin: 0 0 50px 0;
+				font-family: "Raleway", Lucida Sans Unicode;
+			}
+
+			h1{
+				font-family: "Product Sans", Arial, sans-serif;
+				text-align: center;
+			}
+
+			#translation-area{
+				position: relative;
+				margin: auto;
+				width: 90%;
+				background: rgba(0, 0, 0, 0.1);
+				border-radius: 3px;
+				max-width: 1000px;
+				height: 200px;
+			}
+
+			#translation-area::after{
+				visibility: hidden;
+				display: block;
+				content: "";
+				clear: both;
+				height: 0;
+			}
+		
+			#translation-area div{
+				display: inline-block;
+				width: calc(50% - 20px);
+				height: 180px !important;
+				float: left;
+				word-wrap: break-word;
+				margin: 10px;
+			}
+
+			#output{
+				overflow: auto;
+			}
+
+			button{
+				font-family: "Raleway", Lucida Sans Unicode;
+				position: absolute;
+				left: 10px;
+				bottom: -40px;
+				background: #0057e7;
+				border: none;
+				border-radius: 2px;
+				padding: 8px;
+				color: white;
+				cursor: pointer;
+				transition: background .1s;
+			}
+			
+			button:hover{
+				background: #1067f7;
+			}
+
+			#translation-area > label{
+				position: absolute;
+				bottom: -30px;
+				right: 10px;
+				cursor: pointer;
+			}
+			
+			div textarea{
+				outline: none;
+				font-family: "Raleway", Lucida Sans Unicode;
+				width: 100%;
+				height: 100%;
+				box-sizing: border-box;
+				resize: none;
+				border: 1px solid rgba(0, 0, 0, 0.2);
+				border-radius: 3px;
+				transition: border 0.2s ease;
+				text-transform: none;
+			}
+
+			div textarea:focus{
+				border: 1px solid rgba(0, 0, 0, 0.5);
+
+			}
+
+			footer{
+				text-align: center;
+				font-family: "Raleway", Lucida Sans Unicode;
+				position: absolute;
+				bottom: 0px;
+				left: 0px;
+				height: 50px;
+				width: 100%;
+			}
+			
+			.blue{
+				color: #0057e7;
+			}
+
+			.red{
+				color: #d62d20
+			}
+
+			.yellow{
+				color: #ffa700;
+			}
+
+			.green{
+				color: #008744;
+			}
+
+			@media screen and (max-width: 480px){
+				h1{
+					font-size: 1.6em;
+				}
+
+				#translation-area{
+					height: 400px;
+				}
+
+				#translation-area div{
+					width: calc(100% - 20px);
+					margin-left: 10px;
+				}
+			}
+		</style>
+		<script>
+			function initialize(){
+				output = document.getElementById("output");
+				input = document.getElementById("input");
+				checkbox = document.querySelector("#translation-area > label > input");
+				button = document.querySelector("button");
+			}
+
+			function toggleAutoTranslate(){
+				if(checkbox.checked){
+					printT();
+					input.oninput = printT;
+				}
+				else{
+					input.oninput = null;
+				}
+			}
+			
+			function isVowel(letter){
+				return "aeiou".includes(letter.toLowerCase());
+			}
+			
+			function isUppercase(letter){
+				return letter == letter.toUpperCase();
+			}
+			
+			function translate(word){
+				var index = word.toLowerCase().indexOf("illz");
+				if(index >= 0){
+					do{
+						if(isUppercase(word.charAt(index))){
+							word = word.substring(0, index) + word.charAt(index + 4).toUpperCase() + word.substring(index + 5);
+						}
+						else{
+							word = word.substring(0, index) + word.substring(index + 4);
+						}
+
+						index = word.toLowerCase().indexOf("illz");
+					}while(index >= 0);
+
+					return word;
+				}
+				else{
+					var translated = "";
+					for(var i = 0; i < word.length; i++){
+						if(i == 0 && isVowel(word.charAt(i)) || i != 0 && isVowel(word.charAt(i)) && !isVowel(word.charAt(i - 1))){
+							if(isUppercase(word.charAt(i))){
+								translated += "Illz" + word.charAt(i).toLowerCase();
+							}
+							else{
+								translated += "illz" + word.charAt(i);
+							}
+						}
+						else{
+							translated += word.charAt(i);
+						}
+					}
+					return translated;
+				}
+				
+			}
+			
+			function printT(){
+				output.innerHTML = translate(input.value);
+			}
+		</script>
+	</head>
+	<body onload="initialize();">
+	<header>
+		<h1>
+		<span class="blue">Gil</span><span class="red">lz</span><span class="yellow">oo</span><span class="blue">gli</span><span class="green">ll</span><span class="red">ze</span> Translate
+		</h1>
+	</header>
+	<main>
+		<div id = "translation-area">
+			<div>
+				<label>
+					<textarea spellcheck="false" id="input" oninput="printT()" placeholder="Text to translate..." autofocus="true"></textarea>
+				</label>
+			</div>
+			<div id="output"></div>
+			<button onclick="printT();">Translate</button>
+			<label>
+				<input type="checkbox" checked="true" onchange="toggleAutoTranslate();" /> Auto Translate
+			</label>
+		</div>
+	</main>
+	<footer>
+		&copy; Brandon Leitch 2015
+	</footer>
+	</body>
+</html>
