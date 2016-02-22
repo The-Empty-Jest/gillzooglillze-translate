@@ -174,7 +174,7 @@
 				else{
 					var translated = "";
 					for(var i = 0; i < word.length; i++){
-						if(i == 0 && isVowel(word.charAt(i)) || i != 0 && isVowel(word.charAt(i)) && !isVowel(word.charAt(i - 1))){
+						if(isVowel(word.charAt(i)) && (i == 0 || isVowel(word.charAt(i - 1)))){
 							if(isUppercase(word.charAt(i))){
 								translated += "Illz" + word.charAt(i).toLowerCase();
 							}
