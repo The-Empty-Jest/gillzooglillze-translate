@@ -156,39 +156,47 @@
 			}
 			
 			function translate(word){
-				var index = word.toLowerCase().indexOf("illz");
-				if(index >= 0){
-					do{
-						if(isUppercase(word.charAt(index))){
-							word = word.substring(0, index) + word.charAt(index + 4).toUpperCase() + word.substring(index + 5);
-						}
-						else{
-							word = word.substring(0, index) + word.substring(index + 4);
-						}
-
-						index = word.toLowerCase().indexOf("illz");
-					}while(index >= 0);
-
-					return word;
+				if(word.toLowerCase().indexOf("illz") >= 0){
+					return translateToEnglish(word);
 				}
 				else{
-					var translated = "";
-					for(var i = 0; i < word.length; i++){
-						if(isVowel(word.charAt(i)) && (i == 0 || isVowel(word.charAt(i - 1)))){
-							if(isUppercase(word.charAt(i))){
-								translated += "Illz" + word.charAt(i).toLowerCase();
-							}
-							else{
-								translated += "illz" + word.charAt(i);
-							}
+					return translateToDillz(word);
+				}
+			}
+			
+			function translateToEnglish(word){
+				var index = word.toLowerCase().indexOf("illz");
+				
+				while(index >= 0){
+					if(isUppercase(word.charAt(index))){
+						word = word.substring(0, index) + word.charAt(index + 4).toUpperCase() + word.substring(index + 5);
+					}
+					else{
+						word = word.substring(0, index) + word.substring(index + 4);
+					}
+
+					index = word.toLowerCase().indexOf("illz");
+				}
+
+				return word;
+			}
+			
+			function translateToDillz(word){
+				var translated = "";
+				for(var i = 0; i < word.length; i++){
+					if(isVowel(word.charAt(i)) && (i == 0 || isVowel(word.charAt(i - 1)))){
+						if(isUppercase(word.charAt(i))){
+							translated += "Illz" + word.charAt(i).toLowerCase();
 						}
 						else{
-							translated += word.charAt(i);
+							translated += "illz" + word.charAt(i);
 						}
 					}
-					return translated;
+					else{
+						translated += word.charAt(i);
+					}
 				}
-				
+				return translated;
 			}
 			
 			function printT(){
